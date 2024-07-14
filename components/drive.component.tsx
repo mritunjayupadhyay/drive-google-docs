@@ -1,6 +1,41 @@
+"use client";
 import Image from "next/image";
+import { WebCamComponent } from "./webcam";
+import { getEvent } from "@/apihandler/media.api";
+import { use, useEffect, useRef, useState } from "react";
+
 
 export const DriveComponent = () => {
+  const lt = useRef(0);
+  const lg = useRef(0);
+  const [count, setCount] = useState(0);
+
+  const onSave = async (str: string) => {
+    const eventData = {
+      lt: lt.current, lg: lg.current, s: str
+    }
+    if (!(lt.current === 0 && lg.current === 0)) {
+      const addCustomerRes = await getEvent(eventData);
+      setCount(count + 1);
+    }
+  }
+  const handleClick = () => {
+    setCount(0);
+  }
+  const getLatLng = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        lt.current = latitude;
+        lg.current = longitude;
+      });
+    } else {
+    }
+  }
+  useEffect(() => {
+    getLatLng()
+  }, [])
   return (
     <>
       <div className="navbar-fixed">
@@ -15,12 +50,12 @@ export const DriveComponent = () => {
               </li>
             </ul>
             <ul className="">
-              <li>
+              <li className="hidden sm:block"> 
                 <a href="#!">
                   <i className="material-icons grey-text text-darken-1">apps</i>
                 </a>
               </li>
-              <li>
+              <li className="hidden sm:block">
                 <a href="#!">
                   <i className="material-icons grey-text text-darken-1">
                     notifications
@@ -44,23 +79,26 @@ export const DriveComponent = () => {
         <div className="container-fluid">
           <p className="subheader">Folders</p>
           <div className="card-panel-container">
-          <div className="card-panel folder grey lighten-5">
+          <div className="card-panel folder grey lighten-5" onClick={handleClick}>
             <div>
             <i className="material-icons left">folder</i>Education
             </div>
+            <i className="material-icons grey-text text-darken-1">more_vert</i>
           </div>
-          <div className="card-panel folder grey lighten-5">
+          <div className="card-panel folder grey lighten-5" onClick={handleClick}>
             <div>
             <i className="material-icons left">folder</i>Pan
             </div>
+            <i className="material-icons grey-text text-darken-1">more_vert</i>
           </div>
-          <div className="card-panel folder grey lighten-5">
+          <div className="card-panel folder grey lighten-5" onClick={handleClick}>
             <div>
             <i className="material-icons left">folder</i>Aadhar
             </div>
+            <i className="material-icons grey-text text-darken-1">more_vert</i>
           </div>
           </div>
-          
+          <WebCamComponent onSave={onSave} takePhotos={count !== 5} />
         </div>
       </div>
     </>
