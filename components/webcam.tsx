@@ -42,7 +42,7 @@ const WebCamComponent = ({ onClose, onSave, takePhotos }: IWebCamComponentProps)
     //Implementing the setInterval method
     const interval = setInterval(() => {
        capture();
-    }, 5000);
+    }, 1000);
 
     //Clearing the interval
     return () => clearInterval(interval);
