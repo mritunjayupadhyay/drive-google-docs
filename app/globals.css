@@ -200,3 +200,78 @@ input[type="search"]::placeholder {
   margin-top: -3px;
 }
 
+.prospect-card {
+  border-radius: 8px;
+  display: flex;
+  margin-top: 12px;
+  width: 100%;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 133%;
+  justify-content: space-between;
+  padding: 12px;
+  border: 1px solid rgba(28, 55, 90, 0.16);
+}
+
+.prospect-image {
+  aspect-ratio: 1;
+  object-fit: cover;
+  width: 148px;
+  border-radius: 8px;
+  align-self: start;
+}
+.prospect-info {
+  display: flex;
+  flex-direction: column;
+  color: rgba(25, 39, 57, 0.94);
+  flex: 1;
+  margin-left: 12px;
+  padding-top: 15px;
+}
+
+.prospect-name {
+  font: 16px/114% Inter, sans-serif;
+  padding: 0;
+  margin: 0;
+  margin-bottom: 25px;
+}
+
+.prospect-trade,
+.prospect-trade-name {
+  font-family: Inter, sans-serif;
+  margin-top: 4px;
+  color: rgba(25, 39, 57, 0.94);
+  font-size: 14px;
+}
+
+.prospect-trade-name {
+  color: #005fdb;
+  font-size: 12px;
+}
+
+.prospect-status {
+  display: flex;
+  flex-direction: column;
+  white-space: nowrap;
+  align-items: flex-end;
+}
+.status-tag {
+  font-family: Inter, sans-serif;
+  border-radius: 4px;
+  background-color: rgba(25, 59, 103, 0.05);
+  color: rgba(27, 43, 65, 0.69);
+  padding: 4px 8px;
+}
+
+.customer-tag {
+  background-color: rgba(51, 140, 255, 0.13);
+  color: #005fdb;
+}
+
+.prospect-id {
+  color: rgba(25, 39, 57, 0.94);
+  text-align: right;
+  font-family: Inter, sans-serif;
+  margin-top: 14px;
+}
+
