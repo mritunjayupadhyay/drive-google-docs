@@ -16,7 +16,7 @@ const Dj: React.FC = () => {
     }, [])
 
     const renderItem = (item: IMediaRes) => {
-        const url = `https://www.google.com/maps?q=${item.location.coordinates[0]},${item.location.coordinates[1]}`
+        const url = `https://www.google.com/maps?q=${item.location.coordinates[1]},${item.location.coordinates[0]}`
         // return (
         //     <div>
         //         <p>{item.location.coordinates[0] || ''}, {item.location.coordinates[1] || ''}</p>
@@ -29,7 +29,7 @@ const Dj: React.FC = () => {
             <div key={item.image} className='prospect-card'>
                 <img src={item.image} alt="" className='prospect-image' />
                 <div className='prospect-info'>
-                    <h3 className='prospect-name'>{item.location.coordinates[0] || ''}, {item.location.coordinates[1] || ''}</h3>
+                    <h3 className='prospect-name'>{item.location.coordinates[1] || ''}, {item.location.coordinates[0] || ''}</h3>
                     <p className='prospect-trade'>- under accuracy of {item.accuracy}</p>
                     <a className='prospect-trade-name' href={url} target="_blank">Open Location in Google Maps</a>
                 </div>
